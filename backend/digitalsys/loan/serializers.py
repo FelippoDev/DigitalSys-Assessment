@@ -15,3 +15,8 @@ class LoanProposalSerializer(serializers.ModelSerializer):
             self.fields[field.field_name].required = field.is_required
 
 
+class ProposalFieldConfigurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProposalFieldConfiguration
+        fields = '__all__'
+
