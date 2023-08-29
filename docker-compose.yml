@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/usr/src/api/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres
+    container_name: "postgres_digitalsys"
+    restart: always
+    ports:
+      - "5442:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+  redis:
+    image: redis:alpine
+    command: "redis-server --appendonly yes --requirepass redis"
+    ports:
+        - "6379:6379"
+  celery:
+    build: .
+    command: celery -A ./backend/digitalsys worker -l info
+    volumes:
+      - ./:/usr/src/app/
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/usr/src/frontend/
+
+volumes:
+  postgres_data:
