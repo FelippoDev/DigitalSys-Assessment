@@ -1,50 +1,89 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  api:
+  app:
+    container_name: backend_django
+    networks:
+      - challenge_digitalsys
+    restart: always
     build: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./backend:/usr/src/api/
     ports:
-      - 8000:8000
+      - "8000:8000"
+    expose:
+      - "8000"
+    volumes:
+      - ./backend:/usr/src/api
+    command: >
+      sh -c "python3 manage.py migrate &&
+             python3 manage.py loaddata data_fixture.json
+             python3 manage.py runserver 0.0.0.0:8000"
     env_file:
       - ./.env
+    environment:
+      - POSTGRES_HOST=db 
     depends_on:
       - db
       - redis
+
   db:
+    container_name: backend_db
     image: postgres
-    container_name: "postgres_digitalsys"
+    networks:
+      - challenge_digitalsys
     restart: always
     ports:
       - "5442:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+    expose:
+      - "5442"
+    command: -p 5442
+
   redis:
-    image: redis:alpine
-    command: "redis-server --appendonly yes --requirepass redis"
+    container_name: backend_redis
+    networks:
+      - challenge_digitalsys
+    restart: always
+    image: redis:6.0.10
     ports:
-        - "6379:6379"
-  celery:
-    build: .
-    command: celery -A ./backend/digitalsys worker -l info
-    volumes:
-      - ./:/usr/src/app/
+      - "6379:6379"
+    expose:
+      - "6379"
     env_file:
       - ./.env
-    depends_on:
-      - redis
-  web:
-    build: .
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/usr/src/frontend/
 
-volumes:
-  postgres_data:
+  celery:
+    container_name: backend_celery
+    networks:
+      - challenge_digitalsys
+    build: ./backend
+    command: celery -A digitalsys worker --loglevel=info
+    environment:
+      - POSTGRES_HOST=db 
+    env_file:
+      - ./.env
+    volumes:
+      - ./backend:/usr/src/api
+    depends_on:
+      - db
+      - redis
+
+  frontend:
+    container_name: react_app
+    networks:
+      - challenge_digitalsys
+    build:
+      context: ./frontend
+    volumes:
+      - ./frontend:/usr/src/frontend
+      - /usr/src/frontend/node_modules
+    ports:
+      - "5173:5173"
+    expose:
+      - "5173"
+
+networks:
+  challenge_digitalsys:
+    driver: bridge
