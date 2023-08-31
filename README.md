@@ -30,7 +30,7 @@ Admin Panel: ```http://127.0.0.1:8000/admin/``` username: ```admin``` password: 
 ## Web App
 The frontend was developed using react, CSS and HTML. The web part is basically a form where the user can apply for his loan. Once the user submits their application, a pop-up message notifies them that their request has been sent.
 
-All the fields can be removed from the form, besides the fields: ```Número de Documento``` and ```Valor```, for seeing how the admin does that check in the [Admin Panel](##Admin) section below. React will be informed of the necessary fields from the user via a backend endpoint that returns all customizable fields.
+All the fields can be removed from the form, besides the fields: ```Número de Documento``` and ```Valor```, for seeing how the admin does that check in the Admin Panel section below. React will be informed of the necessary fields from the user via a backend endpoint that returns all customizable fields.
 
 
 ## API
