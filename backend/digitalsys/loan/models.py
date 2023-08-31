@@ -15,4 +15,4 @@ class LoanProposal(models.Model):
 class ProposalFieldConfiguration(models.Model):
     field_name = models.CharField(max_length=255)
     is_required = models.BooleanField(default=False)
-    is_displayed = models.BooleanField(default=False)
+

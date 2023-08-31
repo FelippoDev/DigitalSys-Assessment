@@ -15,4 +15,3 @@ def credit_analysis_background_task(document, fullname):
     else:
         loan.status = "Denied"
         loan.save()
-        

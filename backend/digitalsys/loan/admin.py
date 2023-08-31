@@ -4,7 +4,7 @@ from .forms import LoanProposalAdminForm
 
 @admin.register(ProposalFieldConfiguration)
 class ProposalFieldConfigurationAdmin(admin.ModelAdmin):
-    list_display = ('field_name', 'is_required', 'is_displayed')
+    list_display = ('field_name', 'is_required')
 
 
 @admin.register(LoanProposal)

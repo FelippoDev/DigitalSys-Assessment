@@ -9,7 +9,7 @@ class LoanProposalAPIView(CreateAPIView):
     
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        credit_analysis_background_task(
+        credit_analysis_background_task.delay(
             response.data['document_number'], response.data['fullname']
         )
         return response

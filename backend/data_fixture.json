@@ -1,0 +1,38 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "username": "admin",
+            "email": "admin@ggmail.com",
+            "password": "pbkdf2_sha256$10000$vkRy7QauoLLj$ry+3xm3YX+YrSXbri8s3EcXDIrx5ceM+xQjtpLdw2oE=",
+            "is_superuser": true,
+            "is_staff": true,
+            "is_active": true
+        }
+    },
+    {
+        "model": "loan.proposalfieldconfiguration",
+        "pk": 1,
+        "fields": {
+            "field_name": "phone_number",
+            "is_required": true
+        }
+    },
+    {
+        "model": "loan.proposalfieldconfiguration",
+        "pk": 2,
+        "fields": {
+            "field_name": "email",
+            "is_required": true
+        }
+    },
+    {
+        "model": "loan.proposalfieldconfiguration",
+        "pk": 3,
+        "fields": {
+            "field_name": "fullname",
+            "is_required": true
+        }
+    }
+]
